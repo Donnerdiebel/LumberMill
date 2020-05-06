@@ -158,6 +158,14 @@ class ModifyFields(BaseThreadedModule):
        receivers:
         - NextModule
 
+    # Strip whitespaces from source field.
+    - ModifyFields:
+       action: strip                    # <type: string; is: required>
+       source_field:                    # <type: string; is: required>
+       target_field:                    # <default: None; type: None||string; is: optional>
+       receivers:
+        - NextModule
+
     # Merge source fields to target field as list.
     - ModifyFields:
        action: merge                    # <type: string; is: required>
@@ -644,6 +652,28 @@ class ModifyFields(BaseThreadedModule):
             return event
         target_field = self.target_field if self.target_field else self.source_field
         event[target_field] = values
+        return event
+
+    def strip(self, event):
+        """
+        Strip whitespaces from string.
+
+        - module: ModifyFields
+          action: strip                               # <type: string; is: required>
+          source_field:                               # <type: list; is: required>
+          target_field:                               # <default: None; type: None||string; is: optional>
+          receivers:
+            - NextModule
+
+        @param event: dictionary
+        @return: event: dictionary
+        """
+        try:
+            value = event[self.source_field].strip()
+        except:
+            return event
+        target_field = self.target_field if self.target_field else self.source_field
+        event[target_field] = value
         return event
 
     def merge(self, event):

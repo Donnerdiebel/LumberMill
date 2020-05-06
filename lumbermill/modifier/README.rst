@@ -377,6 +377,14 @@ Configuration templates:
        receivers:
         - NextModule
 
+    # Strip whitespaces from source field.
+    - ModifyFields:
+       action: strip                    # <type: string; is: required>
+       source_field:                    # <type: string; is: required>
+       target_field:                    # <default: None; type: None||string; is: optional>
+       receivers:
+        - NextModule
+
     # Merge source fields to target field as list.
     - ModifyFields:
        action: merge                    # <type: string; is: required>
