@@ -5,7 +5,7 @@ To start LumberMill docker container (execute this in the root folder of the Lum
 >sudo docker run -it --rm -p5151:5151 -v $(pwd):/opt/LumberMill/ lumbermill /opt/LumberMill/bin/lumbermill.pypy -c <path to configuration>
 
 While developing, start container and get a shell:
->sudo docker run -it --rm -p5151:5151 -v $(pwd):/opt/LumberMill/ lumbermill /bin/bash
+>sudo docker run --entrypoint "/bin/bash" -it --rm -p5151:5151 -v $(pwd):/opt/LumberMill/ lumbermill
 
 For running tests against services like mongodb or filebeat, use the docker-compose file:
 >sudo docker-compose up
