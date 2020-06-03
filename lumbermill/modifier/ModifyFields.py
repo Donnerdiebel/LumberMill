@@ -279,16 +279,16 @@ class ModifyFields(BaseThreadedModule):
         if "configure_%s_action" % self.action in dir(self):
             getattr(self, "configure_%s_action" % self.action)(configuration)
 
-    def configure_slice_action(self):
+    def configure_slice_action(self, configuration):
         self.slice_start = self.getConfigurationValue('start')
         self.slice_end = self.getConfigurationValue('end')
 
-    def configure_rename_replace_action(self):
+    def configure_rename_replace_action(self, configuration):
         self.recursive = self.getConfigurationValue('recursive')
         self.old = self.getConfigurationValue('old')
         self.new = self.getConfigurationValue('new')
 
-    def configure_rename_regex_action(self):
+    def configure_rename_regex_action(self, configuration):
         self.recursive = self.getConfigurationValue('recursive')
         self.regex = re.compile(self.getConfigurationValue('regex'))
         self.replace = self.getConfigurationValue('replace')
@@ -300,21 +300,21 @@ class ModifyFields(BaseThreadedModule):
         else:
             self.handleEvent = getattr(self, "split_list")
 
-    def configure_key_value_action(self):
+    def configure_key_value_action(self, configuration):
         self.line_separator = self.getConfigurationValue('line_separator')
         self.kv_separator = self.getConfigurationValue('kv_separator')
         self.prefix = self.getConfigurationValue('prefix')
 
-    def configure_key_value_regex_action(self):
+    def configure_key_value_regex_action(self, configuration):
         self.prefix = self.getConfigurationValue('prefix')
 
-    def configure_join_action(self):
+    def configure_join_action(self, configuration):
         self.separator = self.getConfigurationValue('separator')
 
-    def configure_anonymize_action(self):
+    def configure_anonymize_action(self, configuration):
         self.configure_hash_action()
 
-    def configure_hash_action(self):
+    def configure_hash_action(self, configuration):
         # Import murmur hashlib if configured.
         self.salt = self.getConfigurationValue('salt') if self.getConfigurationValue('salt') else ""
         self.algorithm = self.getConfigurationValue('algorithm')
