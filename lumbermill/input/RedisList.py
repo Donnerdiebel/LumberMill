@@ -92,7 +92,7 @@ class RedisList(BaseThreadedModule):
         pipeline = self.client.pipeline()
         while self.alive:
             for _ in range(0, self.batch_size):
-                pipeline.blpop(self.lists, timeout=self.timeout)
+                pipeline.lpop(self.lists, timeout=self.timeout)
             try:
                 events = pipeline.execute()
             except:
