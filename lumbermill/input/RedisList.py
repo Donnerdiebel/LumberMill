@@ -91,8 +91,9 @@ class RedisList(BaseThreadedModule):
     def handleBatchEvents(self):
         pipeline = self.client.pipeline()
         while self.alive:
-            for _ in range(0, self.batch_size):
-                pipeline.lpop(self.lists, timeout=self.timeout)
+            pipeline.multi()
+            pipeline.lrange(self.lists, 0, self.batch_size - 1)
+            pipeline.ltrim(self.lists, self.batch_size, -1)
             try:
                 events = pipeline.execute()
             except:
