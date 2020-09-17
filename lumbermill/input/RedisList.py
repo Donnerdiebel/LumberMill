@@ -76,7 +76,7 @@ class RedisList(BaseThreadedModule):
         while self.alive:
             event = None
             try:
-                event = self.client.blpop(self.lists, timeout=self.timeout)
+                event = self.client.lpop(self.lists, timeout=self.timeout)
             except:
                 exc_type, exc_value, exc_tb = sys.exc_info()
                 self.logger.error("Could not read data from redis list(s) %s. Exception: %s, Error: %s." % (self.lists, exc_type, exc_value))

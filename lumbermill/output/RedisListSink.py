@@ -3,10 +3,25 @@ import sys
 
 import redis
 
+from lumbermill.constants import IS_PYPY
 from lumbermill.BaseThreadedModule import BaseThreadedModule
 from lumbermill.utils.Buffers import Buffer
 from lumbermill.utils.Decorators import ModuleDocstringParser
 from lumbermill.utils.DynamicValues import mapDynamicValue
+
+# For pypy the default json module is the fastest.
+if IS_PYPY:
+    import json
+else:
+    json = False
+    for module_name in ['ujson', 'yajl', 'simplejson', 'json']:
+        try:
+            json = __import__(module_name)
+            break
+        except ImportError:
+            pass
+    if not json:
+        raise ImportError
 
 
 @ModuleDocstringParser
@@ -82,7 +97,7 @@ class RedisListSink(BaseThreadedModule):
         if self.format:
             publish_data = mapDynamicValue(self.format, event)
         else:
-            publish_data = event
+            publish_data = json.dumps(event)
         self.buffer.append(publish_data)
         yield None
 
