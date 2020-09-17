@@ -102,11 +102,12 @@ class RedisList(BaseThreadedModule):
                 self.logger.error("Could not read data from redis list(s) %s. Exception: %s, Error: %s." % (self.lists, exc_type, exc_value))
                 continue
             for event in events:
-                # If batch_size is bigger than events waiting in redis queue, the remaining entries will be filled with None values.
-                # So break out if a None value is found.
-                if not event:
+                try:
+                    event = DictUtils.getDefaultEventDict(dict={"received_from": 'RedisList', "data": event[0]}, caller_class_name=self.__class__.__name__)
+                except (TypeError, IndexError) :
+                    # If batch_size is bigger than events waiting in redis queue, the remaining entries will be filled with None values.
+                    # So break out if a None value is found.
                     # Queue is exhausted. Sleep a bit and retry.
                     time.sleep(.5)
                     break
-                event = DictUtils.getDefaultEventDict(dict={"received_from": '%s' % event[0], "data": event[1]}, caller_class_name=self.__class__.__name__)
                 self.sendEvent(event)
