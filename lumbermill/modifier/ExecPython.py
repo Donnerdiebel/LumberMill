@@ -22,7 +22,6 @@ class ExecPython(BaseThreadedModule):
         event['request_time'] = math.ceil(event['request_time'] * 1000)
 
     imports: Modules to import, e.g. re, math etc.
-    code: Code to execute.
     debug: Set to True to output the string that will be executed.
 
     Configuration template:

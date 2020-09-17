@@ -408,7 +408,7 @@ class ModifyFields(BaseThreadedModule):
         """
         try:
             event[self.target_field] = event[self.getConfigurationValue('value')]
-        except KeyError:
+        except (TypeError, KeyError) as e:
             event[self.target_field] = self.getConfigurationValue('value', event)
         yield event
 
@@ -680,6 +680,7 @@ class ModifyFields(BaseThreadedModule):
         """
         try:
             values = event[self.source_field]
+            import pprint
         except:
             yield event
         target_field = self.target_field if self.target_field else self.source_field
