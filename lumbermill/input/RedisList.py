@@ -92,8 +92,9 @@ class RedisList(BaseThreadedModule):
         pipeline = self.client.pipeline()
         while self.alive:
             pipeline.multi()
-            pipeline.lrange(self.lists, 0, self.batch_size - 1)
-            pipeline.ltrim(self.lists, self.batch_size, -1)
+            for redis_list in self.lists:
+                pipeline.lrange(redis_list, 0, self.batch_size - 1)
+                pipeline.ltrim(redis_list, self.batch_size, -1)
             try:
                 events = pipeline.execute()
             except:
