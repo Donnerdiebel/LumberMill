@@ -680,15 +680,17 @@ class ModifyFields(BaseThreadedModule):
         """
         try:
             values = event[self.source_field]
-            import pprint
         except:
             yield event
         target_field = self.target_field if self.target_field else self.source_field
-        for value in values:
-            new_event = cloneDefaultDict(event)
-            new_event.pop(self.source_field, None)
-            new_event[target_field] = value
-            yield new_event
+        try:
+            event.pop(self.source_field, None)
+            for value in values:
+                new_event = cloneDefaultDict(event)
+                new_event[target_field] = value
+                yield new_event
+        except UnboundLocalError:
+            yield event
 
     def strip(self, event):
         """

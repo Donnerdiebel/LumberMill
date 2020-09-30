@@ -50,9 +50,6 @@ class Buffer:
             self.flush()
         return timedFlush
 
-    def append(self, item):
-        self.put(item)
-
     def put(self, item):
         # Wait till a running store is finished to avoid strange race conditions when using this buffer with multiprocessing.
         while self.is_flushing:
