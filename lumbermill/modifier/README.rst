@@ -372,15 +372,8 @@ Configuration templates:
     - ModifyFields:
        action: split                    # <type: string; is: required>
        separator:                       # <type: string; is: required>
+       maxsplit:                        # <defult: -1; type: integer; is: optional>
        source_field:                    # <type: list; is: required>
-       target_field:                    # <default: None; type: None||string; is: optional>
-       receivers:
-        - NextModule
-
-    # Strip whitespaces from source field.
-    - ModifyFields:
-       action: strip                    # <type: string; is: required>
-       source_field:                    # <type: string; is: required>
        target_field:                    # <default: None; type: None||string; is: optional>
        receivers:
         - NextModule

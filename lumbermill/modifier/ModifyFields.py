@@ -154,6 +154,7 @@ class ModifyFields(BaseThreadedModule):
     - ModifyFields:
        action: split                    # <type: string; is: required>
        separator:                       # <type: string; is: required>
+       maxsplit:                        # <default: -1; type: integer; is: optional>
        source_field:                    # <type: list; is: required>
        target_field:                    # <default: None; type: None||string; is: optional>
        receivers:
@@ -296,7 +297,7 @@ class ModifyFields(BaseThreadedModule):
     def configure_split_action(self, configuration):
         if 'separator' in configuration:
             self.separator = self.getConfigurationValue('separator')
-            self.logger.info(self.separator)
+            self.maxsplit = self.getConfigurationValue('maxsplit')
         else:
             self.handleEvent = getattr(self, "split_list")
 
@@ -647,6 +648,7 @@ class ModifyFields(BaseThreadedModule):
         - module: ModifyFields
           action: split                               # <type: string; is: required>
           separator:                                  # <type: string; is: required>
+          maxsplit:                                   # <defult: -1; type: integer; is: optional>
           source_field:                               # <type: list; is: required>
           target_field:                               # <default: None; type: None||string; is: optional>
           receivers:
@@ -656,7 +658,7 @@ class ModifyFields(BaseThreadedModule):
         @yields: event: dictionary
         """
         try:
-            values = event[self.source_field].split(self.separator)
+            values = event[self.source_field].split(self.separator, self.maxsplit)
         except:
             yield event
         target_field = self.target_field if self.target_field else self.source_field
